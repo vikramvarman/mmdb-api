@@ -2,6 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
+import { authenticate } from "./middleware";
 
 const prisma = new PrismaClient();
 export const UserRouter = express.Router();
@@ -9,6 +10,10 @@ export const UserRouter = express.Router();
 function generateAccessToken(user: any) {
   return jwt.sign(user, process.env.JWT_SECRET);
 }
+
+UserRouter.post("/test", authenticate(), async (req, res, next) => {
+  res.send("ok");
+});
 
 UserRouter.post("/login", async (req, res, next) => {
   try {
