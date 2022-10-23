@@ -15,20 +15,20 @@ model users {
   password    String   @db.VarChar(60)
   email       String?  @unique @db.VarChar(255)
   preferences Json     @default("{}")
-  movie       movie[]
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt   DateTime @default(now()) @map("updated_at") @db.Timestamp(6)
+  movie       movie[]
 }
 
 model movie {
-  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name        String?  @default("")
-  rating      Int?     @default(0)
-  castMembers String[] @map("cast_members")
-  genre       String?  @default("")
-  release     DateTime @default(now()) @db.Timestamp(6)
-  createdAt   DateTime @default(now()) @map("create_at") @db.Timestamp(6)
-  updatedAt   DateTime @default(now()) @map("updated_at") @db.Timestamp(6)
-  userId      String?  @map("user_id") @db.Uuid
-  users       users?   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_movie_users")
+  id           String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name         String?  @default("")
+  rating       Int?     @default(0)
+  cast_members String[]
+  genre        String?  @default("")
+  release      DateTime @default(now()) @db.Timestamp(6)
+  created_at   DateTime @default(now()) @db.Timestamp(6)
+  updated_at   DateTime @default(now()) @db.Timestamp(6)
+  user_id      String?  @db.Uuid
+  users        users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_movie_users")
 }

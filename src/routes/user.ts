@@ -30,34 +30,23 @@ UserRouter.post("/login", async (req, res, next) => {
     }
 
     const accessToken = generateAccessToken(user);
-    return res.json({ accessToken: accessToken });
+    return res.json({ accessToken: accessToken, user });
   } catch (e) {
     console.error(e);
     return next(e);
   }
 });
 
-UserRouter.post("/signup", async (req, res, next) => {
+UserRouter.post("/register", async (req, res, next) => {
   try {
-    const { username, firstName, lastName, password, email } = req.body;
+    const { username, password } = req.body;
 
     if (!username) {
       return res.status(400).send("username required");
     }
 
-    if (firstName) {
-      return res.status(400).send("firstName required");
-    }
-
-    if (!lastName) {
-      return res.status(400).send("lastName required");
-    }
-
     if (!password) {
       return res.status(400).send("password required");
-    }
-    if (!email) {
-      return res.status(400).send("email required");
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -65,10 +54,7 @@ UserRouter.post("/signup", async (req, res, next) => {
 
     const user = await prisma.users.create({
       data: {
-        firstName,
         username,
-        lastName,
-        email,
         password: hashedPassword,
       },
     });
