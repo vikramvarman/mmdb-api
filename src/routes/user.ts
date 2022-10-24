@@ -30,7 +30,11 @@ UserRouter.post("/login", async (req, res, next) => {
     }
 
     const accessToken = generateAccessToken(user);
-    return res.json({ accessToken: accessToken, user });
+    return res.json({
+      accessToken: accessToken,
+      id: user.id,
+      username: user.username,
+    });
   } catch (e) {
     console.error(e);
     return next(e);

@@ -27,7 +27,7 @@ model movie {
   castMembers String[] @map("cast_members")
   genre       String?  @default("")
   release     DateTime @default(now()) @db.Timestamp(6)
-  createdAt   DateTime @default(now()) @map("create_at") @db.Timestamp(6)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt   DateTime @default(now()) @map("updated_at") @db.Timestamp(6)
   userId      String?  @map("user_id") @db.Uuid
   users       users?   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_movie_users")

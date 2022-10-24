@@ -9,7 +9,8 @@ console.log("app initiated");
 import app from "./app";
 
 // use this line to get port from environment variable
-const PORT = process.env.PORT || 8001;
-app.listen(PORT, () => {
-  console.log("listening on port " + PORT);
+const PORT = parseInt(process.env.PORT, 10) || 8001;
+const HOST = process.env.HOST;
+app.listen(PORT, HOST, () => {
+  console.log("listening on port " + PORT + HOST);
 });
