@@ -41,6 +41,7 @@ MovieRouter.post("/", authenticate(), async (req: any, res, next) => {
       castMembers: cast,
       genre,
       release: isoDate,
+      userId: req.user.uuid,
     },
   });
   res.send(movie);
@@ -53,6 +54,14 @@ MovieRouter.put("/:movieId", authenticate(), async (req: any, res, next) => {
   const isoDate = date.toISOString();
 
   const userId = req.user.id;
+  const movieOld = await prisma.movie.findFirst({
+    where: {
+      id: req.params.movieId,
+    },
+  });
+  if (movieOld.userId != userId) {
+    return res.status(401).send("Unauthorized");
+  }
 
   const movie = await prisma.movie.update({
     data: {
@@ -74,6 +83,15 @@ MovieRouter.delete("/:movieId", authenticate(), async (req: any, res, next) => {
   console.log(req.user);
 
   const userId = req.user.id;
+
+  const movieOld = await prisma.movie.findFirst({
+    where: {
+      id: req.params.movieId,
+    },
+  });
+  if (movieOld.userId != userId) {
+    return res.status(401).send("Unauthorized");
+  }
 
   const movies = await prisma.movie.delete({
     where: { id: req.params.movieId },
