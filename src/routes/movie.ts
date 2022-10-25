@@ -48,11 +48,26 @@ MovieRouter.post("/", authenticate(), async (req: any, res, next) => {
 
 MovieRouter.put("/:movieId", authenticate(), async (req: any, res, next) => {
   console.log(req.params.movieId);
+  const { name, rating, cast, genre, release } = req.body;
+  const date = new Date(release);
+  const isoDate = date.toISOString();
 
   const userId = req.user.id;
 
-  const movies = await prisma.movie.findMany({ where: { userId } });
-  res.send({ movies });
+  const movie = await prisma.movie.update({
+    data: {
+      name,
+      rating,
+      castMembers: cast,
+      genre,
+      release: isoDate,
+    },
+    where: {
+      id: req.params.movieId,
+    },
+  });
+
+  return res.send(movie);
 });
 
 MovieRouter.delete("/:movieId", authenticate(), async (req: any, res, next) => {
